@@ -1,8 +1,8 @@
 export default class UpdateShelterDetailsUseCaseOutput {
-	shelterName: string;
-	shelterWhatsApp: string;
-	shelterEmail: string;
-	shelterPhone: string;
+	name: string;
+	whatsApp: string;
+	email: string;
+	phone: string;
 	createdAt: Date;
 	updatedAt: Date;
 	

@@ -1,6 +1,6 @@
 import { Controller } from '@nestjs/common';
 import GetShelterDetailsUseCaseOutput from './usecases/dtos/get.shelter.details.usecase.output';
-import { Body, Delete, Get, Inject, Put }  from '@nestjs/common/decorators'
+import { Body, Delete, Get, Inject, Put }  from '@nestjs/common/decorators';
 import { IUseCase } from 'src/domain/iusecase.interface';
 import ShelterTokens from './shelter.tokens';
 import DeleteShelterDetailsUseCaseInput from './dtos/delete.shelter.controller.input';
