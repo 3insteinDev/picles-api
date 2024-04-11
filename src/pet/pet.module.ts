@@ -8,6 +8,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { Pet, PetSchema } from './schemas/pet.schemas';
 import UpdatePetUseCase from './usecases/update.pet.usecase';
 import GetPetByIdUseCase from './usecases/get.pet.by.id.usecase';
+import DeletePetUseCase from './usecases/delete.pet.usecase';
 
 @Module({
   controllers: [PetController],
@@ -28,6 +29,10 @@ import GetPetByIdUseCase from './usecases/get.pet.by.id.usecase';
 	{
 		provide: PetTokens.getPetByIdUseCase,
 		useClass: GetPetByIdUseCase
+	},
+	{
+		provide: PetTokens.deletePetUseCase,
+		useClass: DeletePetUseCase
 	}
   ]
 })

@@ -3,4 +3,6 @@ import { Pet } from "../schemas/pet.schemas";
 export default interface IPetRepository {
 	create(data: Partial<Pet>): Promise<Pet>
 	getById(id:string): Promise<Pet>
+	update(data: Partial<Pet>): Promise<void>
+	delete(id:string): Promise<void>
 }
