@@ -6,11 +6,18 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { config } from 'process';
 import { PetModule } from './pet/pet.module';
+import { join } from 'path';
+import { MulterModule } from '@nestjs/platform-express';
 
 @Module({
   imports: [
 	ShelterModule, 
 	ConfigModule.forRoot(),
+	// ServeStaticModule.forRoot({
+	// 	rootPath: join(__dirname, '..', '../public'),
+	// 	serveRoot: '/public/',
+	// }),
+	MulterModule,
 	MongooseModule.forRootAsync({
 		imports: [ConfigModule],
 		inject: [ConfigService],
