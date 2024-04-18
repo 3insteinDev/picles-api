@@ -12,11 +12,16 @@ import DeletePetUseCase from './usecases/delete.pet.usecase';
 import UpdatePetPhotoByIdUseCase from './usecases/update.pet.photo.by.id.usecase';
 import AppTokens from 'src/app.tokens';
 import FileService from 'src/services/file.service';
+import GetPetsUseCase from './usecases/get.pets.usecase';
 
 @Module({
   controllers: [PetController],
   imports: [MongooseModule.forFeature([{name: Pet.name, schema: PetSchema}])],
   providers:[
+	{
+		provide: PetTokens.getPetsUseCase,
+		useClass: GetPetsUseCase
+	},
 	{
 		provide: PetTokens.createPetUseCase,
 		useClass: CreatePetUseCase

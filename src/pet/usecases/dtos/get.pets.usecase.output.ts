@@ -1,9 +1,9 @@
+import PetResponse from "./pet.response";
+
 export default class GetPetsUseCaseOutput {
-	type?: string;
-	size?: string;
-	gender?: string;
-	page?: string;
-	itemsPerPage?: string;
+	currentPage: number;
+	totalPages: number;
+	items: PetResponse[];
 
 
 	constructor(data: Partial<GetPetsUseCaseOutput>){
