@@ -1,17 +1,17 @@
 import { IUseCase } from "src/domain/iusecase.interface";
-import GetPetByIdUseCaseInput from "./dtos/get.pet.by.id.usecase.input";
-import GetPetByIdUseCaseOutput from "./dtos/get.pet.by.id.usecase.output";
+import UpdatePetByIdUseCaseInput from "./dtos/update.pet.by.id.usecase.input";
+import UpdatePetByIdUseCaseOutput from "./dtos/update.pet.by.id.usecase.output";
 import { Inject, Injectable } from "@nestjs/common";
-import PetTokens from "../pet.tokens";
 import IPetRepository from "../interfaces/pet.repository.interface";
+import PetTokens from "../pet.tokens";
 import { Pet } from "../schemas/pet.schema";
 import PetNotFoundError from "src/domain/errors/pet.not.found.error";
 import AppTokens from "src/app.tokens";
 import IFileService from "src/interfaces/file.service.interface";
 
 @Injectable()
-export default class GetPetByIdUseCase implements IUseCase<GetPetByIdUseCaseInput, GetPetByIdUseCaseOutput> {
-    
+export default class UpdatePetByIdUseCase implements IUseCase<UpdatePetByIdUseCaseInput, UpdatePetByIdUseCaseOutput> {
+
     constructor(
         @Inject(PetTokens.petRepository)
         private readonly petRepository: IPetRepository,
@@ -19,17 +19,25 @@ export default class GetPetByIdUseCase implements IUseCase<GetPetByIdUseCaseInpu
         @Inject(AppTokens.fileService)
         private readonly fileService: IFileService
     ) { }
-    
-    async run(input: GetPetByIdUseCaseInput): Promise<GetPetByIdUseCaseOutput> {
-        const pet = await this.getPetById(input.id)
 
-        if (pet === null) {
+    async run(input: UpdatePetByIdUseCaseInput): Promise<UpdatePetByIdUseCaseOutput> {
+        
+        let pet = await this.getPetById(input.id)
+
+        if(!pet) {
             throw new PetNotFoundError()
         }
 
+        await this.petRepository.updateById({
+            ...input,
+            _id: input.id
+        });
+
+        pet = await this.getPetById(input.id);
+
         const petPhoto = !!pet.photo ? (await this.fileService.readFileInBase64(pet.photo)) : null;
 
-        return new GetPetByIdUseCaseOutput({
+        return new UpdatePetByIdUseCaseOutput({
             id: pet._id,
             name: pet.name,
             type: pet.type,
@@ -49,4 +57,5 @@ export default class GetPetByIdUseCase implements IUseCase<GetPetByIdUseCaseInpu
             return null
         }
     }
+    
 }

@@ -7,15 +7,16 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
   app.enableCors();
-  
+
   const config = new DocumentBuilder()
-    .setTitle('Picles API')
-    .setDescription('The Picles API description')
+    .setTitle('Picles')
+    .setDescription('The picles API description')
     .setVersion('1.0')
     .addTag('picles')
     .build();
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('picles', app, document);
+  SwaggerModule.setup('api', app, document);
+
   await app.listen(3000);
 }
 bootstrap();

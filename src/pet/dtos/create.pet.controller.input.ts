@@ -1,30 +1,30 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty, IsString, MaxLength } from "class-validator";
+import { IsString, IsNotEmpty, MaxLength } from "class-validator";
 
-export default class CreatePetControllerInput{
-@IsString()
-@IsNotEmpty()
-@ApiProperty({description: "Esse será o nome do nosso pet"})
-name: string;
-
-@IsString()
-@IsNotEmpty()
-@ApiProperty({description: "Esse será o tipo do nosso pet"})
-type: string;
-
-@IsString()
-@IsNotEmpty()
-@ApiProperty({description: "Esse será o tamanho do nosso pet"})
-size: string;
-
-@IsString()
-@IsNotEmpty()
-@ApiProperty({description: "Esse será o genero do nosso pet"})
-gender: string;
-
-@IsString()
-@IsNotEmpty()
-@MaxLength(1024)
-@ApiProperty({description: "Essa será a biografia do nosso pet"})
-bio: string;
+export default class CreatePetControllerInput {
+    @IsString()
+    @IsNotEmpty()
+    @ApiProperty({ description: 'Nome do Pet' })
+    name: string;
+  
+    @IsString()
+    @IsNotEmpty()
+    @ApiProperty({ description: 'Tipo do Pet' })
+    type: string;
+  
+    @IsString()
+    @IsNotEmpty()
+    @ApiProperty({ description: 'Tamanho do Pet' })
+    size: string;
+  
+    @IsString()
+    @IsNotEmpty()
+    @ApiProperty({ description: 'Gênero do Pet' })
+    gender: string;
+  
+    @IsString()
+    @IsNotEmpty()
+    @MaxLength(1024)
+    @ApiProperty({ description: 'Biografia do Pet', maximum: 1024 })
+    bio: string;
 }

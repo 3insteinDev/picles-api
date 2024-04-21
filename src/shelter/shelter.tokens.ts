@@ -1,7 +1,6 @@
 export default class ShelterTokens {
-	static getShelderDetailsUseCase = 'getShelderDetailsUseCase';
-	
-	static updateShelderDetailsUseCase = 'updateShelderDetailsUseCase';
+  static getShelterDetailsUseCase = 'getShelterDetailsUseCase';
+  static updateShelterDetailsUseCase = 'updateShelterDetailsUseCase';
 
-	static shelterRepository = 'shelterRepository';
+  static shelterRepository = 'shelterRepository';
 }

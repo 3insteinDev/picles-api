@@ -1,71 +1,75 @@
-import { InjectModel } from "@nestjs/mongoose";
+import { Inject, Injectable } from "@nestjs/common";
 import IPetRepository from "./interfaces/pet.repository.interface";
-import { Injectable } from "@nestjs/common";
-import { Pet } from "./schemas/pet.schemas";
+import { Pet } from "./schemas/pet.schema";
+import { InjectModel } from "@nestjs/mongoose";
 import { Model } from "mongoose";
 import FindByFilterAndTotal from "./usecases/dtos/find.by.filter.and.total";
 import GetPetsUseCaseInput from "./usecases/dtos/get.pets.usecase.input";
 
 @Injectable()
-export default class PetRepository implements IPetRepository{
-	constructor(
-		@InjectModel(Pet.name)
-		private readonly petModel: Model<Pet>,
-	){}
-	
-	async findByFilter(input: GetPetsUseCaseInput): Promise<FindByFilterAndTotal> {
-		
-		const FIRST_PAGE = 1;
-		const skip = input.page === FIRST_PAGE ? 0 : input.itemsPerPage * (input.page -1);
+export default class PetRepository implements IPetRepository {
 
-		let query = this.petModel.find();
+    constructor(
+        @InjectModel(Pet.name)
+        private readonly petModel: Model<Pet>,
+    ) { }
 
-		if(input.type){
-			query = query.find({type: input.type});
-		}
 
-		if(input.size){
-			query = query.find({type: input.size});
-		}
+    async findByFilter(input: GetPetsUseCaseInput): Promise<FindByFilterAndTotal> {
 
-		if(input.gender){
-			query = query.find({type: input.gender});
-		}
+        const FIRST_PAGE = 1;
+        const skip = input.page == FIRST_PAGE ? 0 : input.itemsPerPage * (input.page - 1);
 
-		const totalQuery = query.clone().countDocuments();
-		const skipQuery = query.clone().skip(skip).limit(input.itemsPerPage);
+        let query = this.petModel.find().lean();
 
-		const [items,total] = await Promise.all([
-			skipQuery.exec(),
-			totalQuery.exec(),
-		])
-		return new FindByFilterAndTotal({ items, total})
-	}
+        if (input.type) {
+            query = query.find({ type: input.type });
+        }
 
-	async getById(id: string): Promise<Pet> {
-		return await this.petModel.findById(id)
-	}
+        if (input.size) {
+            query = query.find({ size: input.size });
+        }
 
-	async create(data: Partial<Pet>):Promise<Pet>{
-		return await this.petModel.create({
-			...data,
-			createdAt: new Date(),
-			updatedAt: new Date()
-		})
-	}
+        if (input.gender) {
+            query = query.find({ gender: input.gender });
+        }
 
-	async update(data: Partial<Pet>):Promise<void>{
-		await this.petModel.updateOne(
-		{
-			_id: data._id
-		},
-		{
-			...data,
-			updateAt: new Date()
-		})
-	}
+        const totalQuery = query.clone().countDocuments();
+        const skipQuery = query.clone().skip(skip).limit(input.itemsPerPage);
 
-	async delete(id:string): Promise<void>{
-		await this.petModel.findByIdAndDelete(id)
-	}
+        const [items, total] = await Promise.all([
+            skipQuery.exec(),
+            totalQuery.exec(),
+        ]);
+
+        return new FindByFilterAndTotal({ items, total });
+    }
+
+    async getById(id: string): Promise<Pet> {
+        return await this.petModel.findById(id)
+    }
+
+    async create(data: Partial<Pet>): Promise<Pet> {
+        return await this.petModel.create({
+            ...data,
+            createdAt: new Date(),
+            updatedAt: new Date()
+        })
+    }
+
+    async updateById(data: Partial<Pet>): Promise<void> {
+        await this.petModel.updateOne(
+            {
+                _id: data._id
+            }, {
+            ...data,
+            updatedAt: new Date()
+        }
+        )
+    }
+
+    async deleteById(id: string): Promise<void> {
+        await this.petModel.findByIdAndDelete(id)
+    }
+
 }
